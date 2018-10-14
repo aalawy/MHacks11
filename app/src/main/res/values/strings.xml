@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Triple T</string>
-    <string name="beginButton">Begin Game</string>
-    <string name="helloString">Well Hello and Welcome to Triple T!</string>
+    <string name="signUp">Sign up</string>
+    <string name="helloString">Register for Triple T</string>
 </resources>

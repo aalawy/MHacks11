@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "268252954400",
+    "firebase_url": "https://mhacks11-caadb.firebaseio.com",
+    "project_id": "mhacks11-caadb",
+    "storage_bucket": "mhacks11-caadb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268252954400:android:cf705ee38d513f74",
+        "android_client_info": {
+          "package_name": "com.mhacks11.triplet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268252954400-9cs63v7t4urmb49s9m9q8hoe9ibgp1gi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mhacks11.triplet",
+            "certificate_hash": "e65379b5bfec75f56ff3012e72f8ec7e3ebd7081"
+          }
+        },
+        {
+          "client_id": "268252954400-8rmp2biefs2h92kcphjl5s0vt26jm81n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsSszr_RQhnvuYgeiCRgfviIiBzBlRymM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268252954400-8rmp2biefs2h92kcphjl5s0vt26jm81n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
