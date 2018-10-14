@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         if(mAuthListener != null){
             FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
         }
+        else{
+            startActivity(new Intent(MainActivity.this, Home.class));
+        }
     }
 
 
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user!=null){
                     Intent intent = new Intent(MainActivity
-                            .this, MainActivity.class);
+                            .this, Home.class);
                     startActivity(intent);
                     finish();
                 }

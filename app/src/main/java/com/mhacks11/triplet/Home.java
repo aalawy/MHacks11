@@ -29,6 +29,8 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
+                startActivity(new Intent(Home.this, MainActivity.class));
             }
         });
 
@@ -39,16 +41,15 @@ public class Home extends AppCompatActivity {
                 startActivity(new Intent(Home.this, GameActivity.class));
             }
         });
-
-
     }
 
     private void setupFirebaseListener(){
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if(user == null){
+                    finish();
                     startActivity(new Intent(Home.this, MainActivity.class));
                 }
             }
@@ -68,4 +69,5 @@ public class Home extends AppCompatActivity {
             FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
         }
     }
+
 }
