@@ -4,11 +4,17 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,10 +24,8 @@ import com.mhacks11.triplet.Model.User;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseDatabase database;
-    DatabaseReference users;
     Button btnSignUp;
-
+    private FirebaseAuth mAuth;
     EditText editEmail, editUsername, editPassword;
 
 
@@ -30,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        database = FirebaseDatabase.getInstance();
-        users = database.getReference().child("Users");
+        mAuth = FirebaseAuth.getInstance();
 
         editUsername = (EditText) findViewById(R.id.username);
         editEmail = (EditText) findViewById(R.id.email);
@@ -47,23 +50,37 @@ public class MainActivity extends AppCompatActivity {
                         editEmail.getText().toString(),
                         editPassword.getText().toString());
 
-                users.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                String email = user.getEmail();
+                String password = user.getPassword();
 
-                        if(dataSnapshot.child(user.getUsername()).exists())
-                            Toast.makeText(MainActivity.this, "The username already exists!",Toast.LENGTH_SHORT).show();
-                        else{
-                            users.child(user.getUsername()).setValue(user);
-                            Toast.makeText(MainActivity.this, "Register Succesful!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(MainActivity.this, GameActivity.class);
-                            startActivity(i);
+                if (email.isEmpty()) {
+                    editEmail.setError("Email is required");
+                    editEmail.requestFocus();
+                    return;
+                }
+
+                if (password.isEmpty()) {
+                    editPassword.setError("Password is required");
+                    editPassword.requestFocus();
+                    return;
+                }
+
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            finish();
+                            startActivity(new Intent(MainActivity.this, GameActivity.class));
+                        } else {
+
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(MainActivity.this, "Poop!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
