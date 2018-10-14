@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +27,24 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnSignUp;
     private FirebaseAuth mAuth;
+    FirebaseAuth.AuthStateListener mAuthListener;
     EditText editEmail, editUsername, editPassword;
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mAuthListener != null){
+            FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
+        }
+    }
 
 
     @Override
@@ -35,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener(){
+            @Override
+            public  void  onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user!=null){
+                    Intent intent = new Intent(MainActivity
+                            .this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+
+        };
 
         editUsername = (EditText) findViewById(R.id.username);
         editEmail = (EditText) findViewById(R.id.email);
@@ -70,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             finish();
-                            startActivity(new Intent(MainActivity.this, GameActivity.class));
+                            startActivity(new Intent(MainActivity.this, Home.class));
                         } else {
 
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
